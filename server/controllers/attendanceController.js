@@ -1,10 +1,18 @@
 import Attendance from "../models/Attendance.js";
 
+// READ
 export const getAllAttendance = async (_req, res) => {
-  const list = await Attendance.find();
-  return res.json("Berhasil terkoneksi!");
+  try {
+    const list = await Attendance.find().populate("user", "name email");
+    return res.json(list);
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching attendance", error: err.message });
+  }
 };
 
+// READ by ID
 export const getAttendanceById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -22,13 +30,25 @@ export const getAttendanceById = async (req, res) => {
   }
 };
 
+// CREATE, UPDATE, DELETE
 export const createAttendance = async (req, res) => {
   try {
-    const data = new Attendance(req.body);
+    const { user, name, date, task, status } = req.body;
+    const userId = req.user?.id || req.body.user;
+
+    const data = new Attendance({
+      user: userId,
+      name,
+      date,
+      task,
+      status,
+    });
     const savedData = await data.save();
-    res.status(201).json(savedData);
+    return res.status(201).json(savedData);
   } catch (error) {
-    res.status(500).json({ message: "Error creating attendance", error });
+    return res
+      .status(500)
+      .json({ message: "Error creating attendance", error: error.message });
   }
 };
 

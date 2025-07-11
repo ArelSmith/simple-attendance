@@ -1,8 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
-import { ConnectDB } from "./config/db.js";
-import attendanceRoutes from "./routes/attendance.js";
 import cors from "cors";
+import { ConnectDB } from "./config/db.js";
+
+import attendanceRoutes from "./routes/attendance.js";
+import authRoutes from "./routes/auth.js";
 
 dotenv.config();
 
@@ -16,6 +18,7 @@ app.get("/", (_req, res) => {
 
 // routes
 app.use("/attendance", attendanceRoutes);
+app.use("/auth", authRoutes);
 
 app.listen(5000, () => {
   ConnectDB();
