@@ -10,8 +10,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Server is ready 1234");
+app.get("/", (_req, res) => {
+  res.send("You are connected to the server");
 });
 
 // routes
