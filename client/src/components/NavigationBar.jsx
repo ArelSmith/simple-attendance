@@ -1,7 +1,12 @@
 import React from "react";
 import { Link } from "react-router";
+import { useUser } from "../context/UserContext";
+import LogoutButton from "./LogoutButton";
 
 const NavigationBar = () => {
+  const isLoggedIn = !!localStorage.getItem("token");
+
+  const user = useUser();
   return (
     <div>
       <div className="navbar bg-base-100 shadow-sm">
@@ -13,22 +18,23 @@ const NavigationBar = () => {
             <li>
               <Link to="/">Home</Link>
             </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            {/* <li>
-              <details>
-                <summary>Parent</summary>
-                <ul className="bg-base-100 rounded-t-none p-2">
-                  <li>
-                    <a>Link 1</a>
-                  </li>
-                  <li>
-                    <a>Link 2</a>
-                  </li>
-                </ul>
-              </details>
-            </li> */}
+            {isLoggedIn ? (
+              <li>
+                <details>
+                  <summary>{user.name}</summary>
+                  <ul className="bg-base-100 rounded-t-none p-2">
+                    <li>
+                      <a>Dashboard</a>
+                    </li>
+                    <LogoutButton />
+                  </ul>
+                </details>
+              </li>
+            ) : (
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>

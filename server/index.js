@@ -5,6 +5,7 @@ import { ConnectDB } from "./config/db.js";
 
 import attendanceRoutes from "./routes/attendance.js";
 import authRoutes from "./routes/auth.js";
+import { authenticate } from "./middleware/authMiddleware.js";
 
 dotenv.config();
 
@@ -14,6 +15,9 @@ app.use(express.json());
 
 app.get("/", (_req, res) => {
   res.send("You are connected to the server");
+});
+app.get("/protected", authenticate, (req, res) => {
+  res.json({message: "This is a protected route", user: req.user});
 });
 
 // routes
