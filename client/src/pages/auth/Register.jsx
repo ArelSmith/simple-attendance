@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import NavigationBar from "../../components/NavigationBar";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [success, setSuccess] = useState(false);
   const {
@@ -33,6 +35,9 @@ const Register = () => {
       if (!res.ok) throw new Error("Failed to register");
       setSuccess(true);
       reset();
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
     } catch (err) {
       console.error("Registration error:", err.message);
     }
@@ -168,6 +173,15 @@ const Register = () => {
               {errors.confirmPassword.message}
             </span>
           )}
+          <p>
+            Have an account?{" "}
+            <Link
+              to="/login"
+              className="text-blue-400 underline hover:text-blue-600"
+            >
+              Login
+            </Link>
+          </p>
 
           <button
             type="submit"
