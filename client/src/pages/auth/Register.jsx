@@ -99,6 +99,18 @@ const Register = () => {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 message: "Invalid email format",
               },
+              validate: async (value) => {
+                try {
+                  const res = await fetch(
+                    `http://localhost:5000/auth/check-email?email=${value}`
+                  );
+                  const data = await res.json();
+                  return data.available || "Email is already in use";
+                } catch (err) {
+                  console.error("Email check error:", err.message);
+                  return "Failed to validate email";
+                }
+              },
             })}
             required
           />
@@ -126,6 +138,7 @@ const Register = () => {
             />
             <button
               className="btn btn-primary rounded-3xl p-7 ml-2"
+              type="button"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? "Hide" : "Show"}

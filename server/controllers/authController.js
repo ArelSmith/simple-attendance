@@ -53,3 +53,15 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ message: "Error logging in", error });
   }
 };
+
+export const checkUserEmail = async (req, res) => {
+  try {
+    const email = req.query.email;
+    const user = await User.findOne({ email });
+    res.json({ available: !user });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error checking email", error: err.message });
+  }
+};
